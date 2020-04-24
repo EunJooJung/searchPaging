@@ -9,13 +9,5 @@
  	<select id="selectCount" resultType="int">
  		SELECT COUNT(*) FROM EMP
  	</select>
- 	
- 	<select id="seachList" resultType="empDto">
- 		SELECT B.*FROM(SELECT ROWNUM AS RNUM, A.* FROM(SELECT * FROM EMP) A) B WHERE RNUM BETWEEN #{pageStartNum} AND #{pageEndNum} AND ENAME LIKE #{searchKeyword}
- 	</select>
- 	
- 	<select id="keywordCount" resultType="int">
- 		SELECT COUNT(*) FROM EMP WHERE ENAME LIKE #{searchKeyword}
- 	</select>
 	
 </mapper>

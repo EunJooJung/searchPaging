@@ -46,41 +46,92 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/list.do", method = RequestMethod.GET)
-	public String selectList(Model model, int pageNum) {
-		
-		model.addAttribute("pageNum",pageNum);
-		
-		List<EmpDto> list = biz.selectList(pageNum);
-		model.addAttribute("list", list);
-		
-		int count = biz.totalCount();
-		model.addAttribute("count",count);
-		
-		int totalpage = biz.totalPage(pageNum);
-		model.addAttribute("totalpage",totalpage);
-		
-		Map<String, Integer> makeGroupNum = biz.makeGroupNum(pageNum);
-		int groupEnd = makeGroupNum.get("groupEnd");
-		int groupStart = makeGroupNum.get("groupStart");
-		int prevNum = makeGroupNum.get("prevNum");
-		int nextNum = makeGroupNum.get("nextNum");
-		
-		model.addAttribute("groupStart", groupStart);
-		model.addAttribute("groupEnd", groupEnd);
-		model.addAttribute("prevNum", prevNum);
-		model.addAttribute("nextNum", nextNum);
+	public String selectList(Model model, int pageNum, String searchKeyword) {
 		
 		
-		System.out.println("pageNum : "+pageNum);
-		System.out.println("count : "+count);
-		System.out.println("totalpage : "+totalpage);
-		System.out.println("groupEnd : "+groupEnd);
-		System.out.println("groupStart : "+groupStart);
-		System.out.println("prevNum : "+prevNum);
-		System.out.println("nextNum : "+nextNum);
+		if(searchKeyword ==""||searchKeyword == null) {
+			
+			System.out.println("[select List]");
+			
+			model.addAttribute("pageNum",pageNum);
+			
+			List<EmpDto> list = biz.selectList(pageNum);
+			model.addAttribute("list", list);
+			
+			int count = biz.totalCount();
+			model.addAttribute("count",count);
+			
+			int totalpage = biz.totalPage(pageNum);
+			model.addAttribute("totalpage",totalpage);
+			
+			Map<String, Integer> makeGroupNum = biz.makeGroupNum(pageNum);
+			int groupEnd = makeGroupNum.get("groupEnd");
+			int groupStart = makeGroupNum.get("groupStart");
+			int prevNum = makeGroupNum.get("prevNum");
+			int nextNum = makeGroupNum.get("nextNum");
+			
+			model.addAttribute("groupStart", groupStart);
+			model.addAttribute("groupEnd", groupEnd);
+			model.addAttribute("prevNum", prevNum);
+			model.addAttribute("nextNum", nextNum);
+			
+			
+			System.out.println("pageNum : "+pageNum);
+			System.out.println("count : "+count);
+			System.out.println("totalpage : "+totalpage);
+			System.out.println("groupEnd : "+groupEnd);
+			System.out.println("groupStart : "+groupStart);
+			System.out.println("prevNum : "+prevNum);
+			System.out.println("nextNum : "+nextNum);
+			
+			return "list";
+			
+		}else {
 		
-		return "list";
+			System.out.println("[keyword List]");
+			
+			model.addAttribute("pageNum",pageNum);
+			
+			model.addAttribute("searchKeyword",searchKeyword);
+			
+			List<EmpDto> list = biz.selectList(pageNum, searchKeyword);
+			model.addAttribute("list", list);
+			
+			int count = biz.totalCount(searchKeyword);
+			System.out.println("count="+count);
+			model.addAttribute("count",count);
+			
+			int totalpage = biz.totalPage(pageNum, searchKeyword);
+			System.out.println("totlapage="+totalpage);
+			model.addAttribute("totalpage",totalpage);
+			
+			Map<String, Integer> makeGroupNum = biz.makeGroupNum(pageNum, searchKeyword);
+			int groupEnd = makeGroupNum.get("groupEnd");
+			int groupStart = makeGroupNum.get("groupStart");
+			int prevNum = makeGroupNum.get("prevNum");
+			int nextNum = makeGroupNum.get("nextNum");
+			
+			model.addAttribute("groupStart", groupStart);
+			model.addAttribute("groupEnd", groupEnd);
+			model.addAttribute("prevNum", prevNum);
+			model.addAttribute("nextNum", nextNum);
+			
+			
+			System.out.println("pageNum : "+pageNum);
+			System.out.println("count : "+count);
+			System.out.println("totalpage : "+totalpage);
+			System.out.println("groupEnd : "+groupEnd);
+			System.out.println("groupStart : "+groupStart);
+			System.out.println("prevNum : "+prevNum);
+			System.out.println("nextNum : "+nextNum);
+			
+			return "list";
+			
+		}
+		
 	}
+				
+	
 	
 	
 }

@@ -27,7 +27,22 @@ public class EmpDaoImpl implements EmpDao {
 		try {
 			count = sqlSession.selectOne(NAMESPACE+"selectCount");
 		} catch (Exception e) {
-			System.out.println("[error] : mybatis selectCont ");
+			System.out.println("[error] : mybatis selectCount");
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	
+	public int totalCount(String searchKeyword) {
+		
+		int count = 0;
+		searchKeyword = "%"+searchKeyword+"%";
+		
+		try {
+			count = sqlSession.selectOne(NAMESPACE+"keywordCount", searchKeyword);
+		} catch (Exception e) {
+			System.out.println("[error] : mybatis keywordConut ");
 			e.printStackTrace();
 		}
 		
@@ -58,12 +73,55 @@ public class EmpDaoImpl implements EmpDao {
 		
 		return list;
 	}
+	
+	
+
+	@Override
+	public List<EmpDto> selectList(int pageStartNum, int pageEndNum, String searchKeyword) {
+		
+		List<EmpDto> list = new ArrayList<EmpDto>();
+		
+		if(pageEndNum > totalCount()) {
+			pageEndNum = totalCount();
+		}
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("pageStartNum", pageStartNum+"");
+		map.put("pageEndNum", pageEndNum+"");
+		map.put("searchKeyword", "%"+searchKeyword+"%");
+		
+		System.out.println("searchKeyword : "+map.get("searchKeyword"));
+		
+		try {
+			list = sqlSession.selectList(NAMESPACE+"seachList", map);
+		} catch (Exception e) {
+			System.out.println("[error : mybatis selectList(2)]");
+			e.printStackTrace();
+		}
+		
+		
+		return list;
+	}
 
 	@Override
 	public int totalPage(int pageNum) {
 		int total_page = 0;
 		
 		total_page = totalCount() / pageCount + (totalCount() % pageCount > 0 ? 1 : 0);
+		if(pageNum > total_page) {
+			pageNum = total_page;
+		}
+		
+		return total_page;
+	}
+	
+	
+
+	@Override
+	public int totalPage(int pageNum, String searchKeyword) {
+		int total_page = 0;
+		
+		total_page = totalCount(searchKeyword) / pageCount + (totalCount(searchKeyword) % pageCount > 0 ? 1 : 0);
 		
 		if(pageNum > total_page) {
 			pageNum = total_page;
@@ -115,5 +173,43 @@ public class EmpDaoImpl implements EmpDao {
 		
 		return map;
 	}
+
+	@Override
+	public Map<String, Integer> makeGroupNum(int pageNum, String searchKeyword) {
+		
+		int groupNum = makeGroup(pageNum);
+		
+		int groupEnd = 0;
+		groupEnd = groupNum * groupSize;
+		
+		int groupStart = 0;
+		groupStart = groupEnd - (groupSize - 1);
+		
+		if(groupEnd > totalPage(pageNum, searchKeyword)) {
+			groupEnd = totalPage(pageNum, searchKeyword);
+		}
+		
+		int prevNum = groupStart - groupSize;
+		int nextNum = groupStart + groupSize;
+		
+		if(prevNum < 1) {
+			prevNum = 1;
+		}
+		
+		if (nextNum > totalPage(pageNum, searchKeyword)) {
+			nextNum = totalPage(pageNum, searchKeyword);
+		}
+		System.out.println("¿©±â´Â daoimpl nextnum"+nextNum);
+		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("groupEnd", groupEnd);
+		map.put("groupStart", groupStart);
+		map.put("prevNum", prevNum);
+		map.put("nextNum", nextNum);
+		
+		return map;
+	}
+	
+	
 
 }

@@ -13,9 +13,9 @@
 	<br>
 	<table border="1">
 		<colgroup>
-			<col width="150">
 			<col width="100">
-			<col width="150">
+			<col width="100">
+			<col width="100">
 		</colgroup>
 		<thead>
 			<tr>
@@ -43,11 +43,11 @@
 			</c:choose>
 				<tr>
 					<td colspan="3">
-			<a href="list.do?pageNum=1&searchKeyword=${searchKeyword }&count=${count }">◁◁</a>
-	<a href="list.do?pageNum=${prevNum }&searchKeyword=${searchKeyword }&count=${count }">◀</a>
+			<a href="list.do?pageNum=1&count=${count }">◁◁</a>
+	<a href="list.do?pageNum=${prevNum }&count=${count }">◀</a>
 					
 	<c:forEach var="i" begin="${groupStart }" end="${groupEnd }" step="1">
-		<a href="list.do?pageNum=${i }&searchKeyword=${searchKeyword }&count=${count }">
+		<a href="list.do?pageNum=${i }&count=${count }">
 							
 		<c:choose>
 			<c:when test="${page eq i }">
@@ -62,8 +62,8 @@
 		</a>
 	</c:forEach>
 						
-	<a href="list.do?pageNum=${nextNum }&searchKeyword=${searchKeyword }&count=${count }">▶</a>
-	<a href="list.do?pageNum=${totalpage }&searchKeyword=${searchKeyword }&count=${count }">▷▷</a>
+	<a href="list.do?pageNum=${nextNum }&count=${count }">▶</a>
+	<a href="list.do?pageNum=${totalpage }&count=${count }">▷▷</a>
 						
 					</td>
 				</tr>
